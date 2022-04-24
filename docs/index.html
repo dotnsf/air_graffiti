@@ -47,7 +47,7 @@ html, body{
 body{
   background-color: #ffffcc;
 }
-#cv{
+#mycanvas{
   border: 1px solid #333;
   background-color: #ffcccc;
 }
@@ -59,12 +59,12 @@ body{
   <canvas id="mychart1" style="position:relative; width:90%; height: 30%;"></canvas>
   <canvas id="mychart2" style="position:relative; width:90%; height: 30%;"></canvas>
 
-  <div id="result"></div>
   <!--
+  <div id="result"></div>
+  -->
   <div id="cdiv">
     <canvas width="80%" height="30%" id="mycanvas"></canvas>
   </div>
-  -->
 </div>
 
 <script>
@@ -156,7 +156,7 @@ var canvas_height = 200;
 function resized(){
   var browserWidth = window.innerWidth;
   var browserHeight = window.innerHeight;
-  var canvas = document.getElementById( 'cv' );
+  var canvas = document.getElementById( 'mycanvas' );
   if( canvas && canvas.getContext ){
     canvas.width = canvas_width = browserWidth * 0.8;
     canvas.height = canvas_height = browserHeight * 0.4;
@@ -247,8 +247,8 @@ function touchEnd( e ){
 
   if( orientationData && orientationData.length > 0 ){
     //. 描画
-    $('#result').html( '<canvas id="cv" width="' + canvas_width + '" height="' + canvas_height + '" style="display:none;"></canvas><br/><img id="resultimg"/>' );
-    var cvs = document.getElementById( "cv" );
+    //$('#result').html( '<canvas id="cv" width="' + canvas_width + '" height="' + canvas_height + '" style="display:none;"></canvas><br/><img id="resultimg"/>' );
+    var cvs = document.getElementById( "mycanvas" );
     var ctx = cvs.getContext( "2d" );
     ctx.beginPath();
 
