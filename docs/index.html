@@ -134,6 +134,7 @@ function init(){
   */
 
   if( window.TouchEvent ){
+    var canvas = document.getElementById( 'mycanvas' );
     canvas.addEventListener( "touchstart", touchStart );
     canvas.addEventListener( "touchend", touchEnd );
   }
