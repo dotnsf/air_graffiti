@@ -301,7 +301,7 @@ function touchEnd( e ){
     //. ２つ目以降のデータ
     for( var i = 1; i < orientationData.length; i ++ ){
       //. ペンの移動を繰り返す
-      abg = touchData[i];
+      abg = orientationData[i];
       x = abg['lr'];
       y = abg['fb'];
       ctx.lineTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
