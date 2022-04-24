@@ -63,7 +63,8 @@ body{
   <div id="result"></div>
   -->
   <div id="cdiv">
-    <canvas width="80%" height="30%" id="mycanvas"></canvas>
+    <canvas width="80%" height="50%" id="mycanvas"></canvas>
+    <canvas id="touchcanvas" style="position:relative; width:80%; height: 20%;"></canvas>
   </div>
 </div>
 
@@ -134,7 +135,7 @@ function init(){
   */
 
   if( window.TouchEvent ){
-    var canvas = document.getElementById( 'mycanvas' );
+    var canvas = document.getElementById( 'touchcanvas' );
     canvas.addEventListener( "touchstart", touchStart );
     canvas.addEventListener( "touchend", touchEnd );
   }
