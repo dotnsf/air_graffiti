@@ -1,0 +1,18 @@
+
+html, body{
+  text-align: center;
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+body{
+  background-color: #ffffcc;
+}
+#mycanvas{
+  border: 1px solid #333;
+  background-color: #fff;
+}
+#touchcanvas{
+  border: 1px solid #333;
+  background-color: #f88;
+}

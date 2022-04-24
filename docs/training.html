@@ -44,7 +44,7 @@ $(function(){
   if( window.DeviceOrientationEvent ){
     if( DeviceOrientationEvent.requestPermission && typeof DeviceOrientationEvent.requestPermission === 'function' ){
       $('#cdiv').css( 'display', 'none' );
-      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensorForQuery();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
+      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensorForTraining();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
       $('body').prepend( banner );
     }else{
       window.addEventListener( "deviceorientation", deviceOrientation );
@@ -54,7 +54,7 @@ $(function(){
   if( window.TouchEvent ){
     var canvas = document.getElementById( 'touchcanvas' );
     canvas.addEventListener( "touchstart", touchStart );
-    canvas.addEventListener( "touchend", touchEndForQuery );
+    canvas.addEventListener( "touchend", touchEndForTraining );
   }
 });
 </script>
