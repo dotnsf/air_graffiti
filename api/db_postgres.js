@@ -2,7 +2,7 @@
 var express = require( 'express' ),
     bodyParser = require( 'body-parser' ),
     fs = require( 'fs' ),
-    uuidv1 = require( 'uuid/v1' ),
+    { uuidv4 } = require( 'uuid/v4' ),
     api = express();
 
 process.env.PGSSLMODE = 'no-verify';
@@ -67,7 +67,7 @@ api.createOrbit = async function( orbit ){
         try{
           var sql = 'insert into orbits( id, letter, data, created, updated ) values ( $1, $2, $3, $4, $5 )';
           if( !orbit.id ){
-            orbit.id = uuidv1();
+            orbit.id = uuidv4();
           }
           var t = ( new Date() ).getTime();
           orbit.created = t;
@@ -112,7 +112,7 @@ api.createOrbits = function( orbits ){
           for( var i = 0; i < orbits.length; i ++ ){
             var orbit = orbits[i];
             if( !orbit.id ){
-              orbit.id = uuidv1();
+              orbit.id = uuidv4();
             }
             var t = ( new Date() ).getTime();
             orbit.created = t;
@@ -454,7 +454,7 @@ api.post( '/orbits', async function( req, res ){
   var orbits = req.body;
   orbits.forEach( function( orbit ){
     if( !orbit.id ){
-      orbit.id = uuidv1();
+      orbit.id = uuidv4();
     }
   });
 
