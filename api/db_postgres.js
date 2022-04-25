@@ -53,7 +53,6 @@ api.all( '/*', function( req, res, next ){
 });
 
 
-api.use( multer( { dest: '../tmp/' } ).single( 'image' ) );
 api.use( bodyParser.urlencoded( { extended: true, limit: '50mb' } ) );
 api.use( bodyParser.json( { limit: '50mb' }) );
 api.use( express.Router() );
