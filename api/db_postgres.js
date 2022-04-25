@@ -1,6 +1,5 @@
 //. db_postgres.js
 var express = require( 'express' ),
-    multer = require( 'multer' ),
     bodyParser = require( 'body-parser' ),
     fs = require( 'fs' ),
     uuidv1 = require( 'uuid/v1' ),

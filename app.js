@@ -5,8 +5,6 @@ var express = require( 'express' ),
     session = require( 'express-session' ),
     app = express();
 
-var settings = require( './settings' );
-
 var db = require( './api/db_postgres' );
 app.use( '/api/db', db );
 
