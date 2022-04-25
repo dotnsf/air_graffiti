@@ -71,11 +71,27 @@ function touchStart( e ){
   orientationData = [];
 }
 
+function reduceData( arr, num ){
+  var newarr = [];
+  if( arr.length > num ){
+    var step = arr.length / num;
+    for( var i = 0; i < arr.length; i += step ){
+      var idx = Math.floor( i );
+      newarr.push( arr[idx] );
+    }
+    if( newarr.length < num ){
+      newarr.push( arr[arr.length-1] );
+    }
+  }
+
+  return newarr;
+}
+
 function touchEndForTraining( e ){
   e.preventDefault();
   isTouch = false;
 
-  if( orientationData && orientationData.length > 50 ){
+  if( orientationData && orientationData.length >= 50 ){
     //. 描画
     var cvs = document.getElementById( "mycanvas" );
     var ctx = cvs.getContext( "2d" );
@@ -87,6 +103,9 @@ function touchEndForTraining( e ){
 
     var abg = null;
     var x, y;
+
+    //. データを 50 個に凝縮
+    orientationData = reduceData( orientationData, 50 );
 
     //. 最初のデータ
     abg = orientationData[0];
@@ -147,22 +166,24 @@ function touchEndForTraining( e ){
     //. max_x - min_x を 100 とする時、x - min_x はどの位置になるか
     var dx = max_x - min_x;
     var dy = max_y - min_y;
-    var px = [];
-    var py = [];
+    var data = [];
     for( var i = 0; i < orientationData.length; i ++ ){
-      px.push( 100 * ( orientationData[i].lr - min_x ) / dx );
-      py.push( 100 * ( orientationData[i].fb - min_y ) / dy );
+      data.push( [
+        100 * ( orientationData[i].lr - min_x ) / dx,
+        100 * ( orientationData[i].fb - min_y ) / dy
+      ] );
     }
 
-    //. letter, px, py を学習データとして保存する
-    var letterdata = { letter: letter, px: px, py: py };
+    //. letter, data を学習データとして保存する
+    var postdata = { letter: letter, data: data };
 
     $.ajax({
       type: "POST",
-      url: "./data",
-      data: letterdata,
+      url: "./api/db/orbit",
+      data: postdata,
       success: function( data, dataType ){
         console.log( data );
+        alert( JSON.stringify( data ) );
       },
       error: function( jqXHR, textStatus, errorThrown ){
         console.log( textStatus + ": " + errorThrown );
@@ -207,6 +228,8 @@ function touchEndForTraining( e ){
     */
 
     orientationData = [];
+  }else{
+    alert( 'データが少なすぎです（' + orientationData.length + '） >=50' );
   }
 }
 
@@ -214,7 +237,7 @@ function touchEndForQuery( e ){
   e.preventDefault();
   isTouch = false;
 
-  if( orientationData && orientationData.length > 50 ){
+  if( orientationData && orientationData.length >= 50 ){
     //. 描画
     var cvs = document.getElementById( "mycanvas" );
     var ctx = cvs.getContext( "2d" );
@@ -226,6 +249,9 @@ function touchEndForQuery( e ){
 
     var abg = null;
     var x, y;
+
+    //. データを 50 個に凝縮
+    orientationData = reduceData( orientationData, 50 );
 
     //. 最初のデータ
     abg = orientationData[0];
@@ -286,22 +312,22 @@ function touchEndForQuery( e ){
     //. max_x - min_x を 100 とする時、x - min_x はどの位置になるか
     var dx = max_x - min_x;
     var dy = max_y - min_y;
-    var px = [];
-    var py = [];
+    var postdata = [];
     for( var i = 0; i < orientationData.length; i ++ ){
-      px.push( 100 * ( orientationData[i].lr - min_x ) / dx );
-      py.push( 100 * ( orientationData[i].fb - min_y ) / dy );
+      postdata.push( [
+        100 * ( orientationData[i].lr - min_x ) / dx,
+        100 * ( orientationData[i].fb - min_y ) / dy
+      ] );
     }
 
-    //. letter, px, py を学習データとして保存する
-    var letterdata = { letter: letter, px: px, py: py };
-
+    //. postdata を検索する
     $.ajax({
       type: "POST",
-      url: "./data",
-      data: letterdata,
+      url: "./api/db/find",
+      data: postdata,
       success: function( data, dataType ){
         console.log( data );
+        alert( JSON.stringify( data ) );
       },
       error: function( jqXHR, textStatus, errorThrown ){
         console.log( textStatus + ": " + errorThrown );
@@ -346,6 +372,8 @@ function touchEndForQuery( e ){
     */
 
     orientationData = [];
+  }else{
+    alert( 'データが少なすぎです（' + orientationData.length + '） >=50' );
   }
 }
 
