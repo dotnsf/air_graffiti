@@ -71,6 +71,10 @@ api.createOrbit = async function( orbit ){
           var t = ( new Date() ).getTime();
           orbit.created = t;
           orbit.updated = t;
+          for( var j = 0; j < orbit.data.length; j ++ ){
+            orbit.data[j][0] = parseFloat( orbit.data[j][0] );
+            orbit.data[j][1] = parseFloat( orbit.data[j][1] );
+          }
           //console.log( orbit );
           var query = { text: sql, values: [ orbit.id, orbit.letter, JSON.stringify( orbit.data ), orbit.created, orbit.updated ] };
           conn.query( query, function( err, result ){
@@ -116,6 +120,10 @@ api.createOrbits = function( orbits ){
             var t = ( new Date() ).getTime();
             orbit.created = t;
             orbit.updated = t;
+            for( var j = 0; j < orbit.data.length; j ++ ){
+              orbit.data[j][0] = parseFloat( orbit.data[j][0] );
+              orbit.data[j][1] = parseFloat( orbit.data[j][1] );
+            }
             //console.log( orbit );
             var query = { text: sql, values: [ orbit.id, orbit.letter, JSON.stringify( orbit.data ), orbit.created, orbit.updated ] };
             conn.query( query, function( err, result ){
@@ -294,12 +302,8 @@ api.findClosest = async function( data ){
                   var orbit = result.rows[i];
                   var d = 0.0;
                   for( var j = 0; j < orbit.data.length; j ++ ){
-                    console.log( 'j = ' + j );
-                    console.log( orbit.data[j] );
-                    console.log( data[j] );
                     d += Math.pow( orbit.data[j][0] - parseFloat( data[j][0] ), 2 ) 
                       + Math.pow( orbit.data[j][1] - parseFloat( data[j][1] ), 2 );
-                    console.log( ' d = ' + d );
                   }
 
                   if( i == 0 || d < closest ){
@@ -547,8 +551,6 @@ api.post( '/find', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
   var data = req.body;
-  console.log( 'POST /find' );
-  console.log( data );
   api.findClosest( data.data ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );

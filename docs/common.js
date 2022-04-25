@@ -190,43 +190,6 @@ function touchEndForTraining( e ){
       }
     });
 
-    /*
-    //. Canvas => Image
-    var png = cvs.toDataURL( 'image/png' );
-    document.getElementById( "resultimg" ).src = png;
-
-    //. 画像データ取得
-    png = png.replace( /^.*,/, '' );
-
-    //. バイナリ変換
-    var bin = atob( png );
-    var buffer = new Uint8Array( bin.length );
-    for( var i = 0; i < bin.length; i ++ ){
-      buffer[i] = bin.charCodeAt( i );
-    }
-    var blob = new Blob( [buffer.buffer], {
-      type: 'image/png'
-    });
-
-    //. POST
-    var formdata = new FormData();
-    formdata.append( 'image', blob );
-
-    $.ajax({
-      type: "POST",
-      url: "./image",
-      data: formdata,
-      contentType: false,
-      processData: false,
-      success: function( data, dataType ){
-        console.log( data );
-      },
-      error: function( jqXHR, textStatus, errorThrown ){
-        console.log( textStatus + ": " + errorThrown );
-      }
-    });
-    */
-
     orientationData = [];
   }else{
     alert( 'データが少なすぎです（' + orientationData.length + '） >=50' );
