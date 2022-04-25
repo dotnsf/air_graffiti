@@ -216,6 +216,7 @@ function touchEndForQuery( e ){
     //. データを 50 個に凝縮
     orientationData = reduceData( orientationData, 50 );
 
+    /*
     //. 最初のデータ
     abg = orientationData[0];
     x = abg['lr'];
@@ -237,8 +238,9 @@ function touchEndForQuery( e ){
     ctx.fillStyle = "rgb( 255, 0, 0 )";
     ctx.arc( 2 * x + canvas_width / 2, -2 * y + canvas_height / 2, 10, 0, Math.PI * 2, true );
     ctx.fill();
+    */
 
-    //. もう一度、最初のデータ
+    //. 最初のデータ
     abg = orientationData[0];
     x = abg['lr'];
     y = abg['fb'];

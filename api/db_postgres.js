@@ -300,8 +300,9 @@ api.findClosest = async function( data ){
                 var closest = -1;
                 for( var i = 0; i < result.rows.length; i ++ ){
                   var orbit = result.rows[i];
+                  orbit.data = JSON.parse( orbit.data );
                   var d = 0.0;
-                  for( var j = 0; j < orbit.data.length; j ++ ){
+                  for( var j = 0; j < orbit.data.length && j < data.length; j ++ ){
                     console.log( 'j=' + j );
                     console.log( orbit.data[j] );
                     console.log( data[j] );
