@@ -541,6 +541,8 @@ api.post( '/find', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
   var data = req.body;
+  console.log( 'POST /find' );
+  console.log( data );
   api.findClosest( data ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
