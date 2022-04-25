@@ -288,6 +288,8 @@ api.findClosest = async function( data ){
                   var d = 0.0;
                   for( var j = 0; j < orbit.data.length; j ++ ){
                     console.log( 'j = ' + j );
+                    console.log( orbit.data[j] );
+                    console.log( data[j] );
                     d += Math.pow( orbit.data[j][0] - data[j][0], 2 ) 
                       + Math.pow( orbit.data[j][1] - data[j][1], 2 );
                     console.log( ' d = ' + d );
