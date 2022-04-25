@@ -72,7 +72,7 @@ api.createOrbit = async function( orbit ){
           orbit.created = t;
           orbit.updated = t;
           //console.log( orbit );
-          var query = { text: sql, values: [ orbit.id, orbit.letter, orbit.data, orbit.created, orbit.updated ] };
+          var query = { text: sql, values: [ orbit.id, orbit.letter, JSON.stringify( orbit.data ), orbit.created, orbit.updated ] };
           conn.query( query, function( err, result ){
             if( err ){
               console.log( err );
@@ -117,7 +117,7 @@ api.createOrbits = function( orbits ){
             orbit.created = t;
             orbit.updated = t;
             //console.log( orbit );
-            var query = { text: sql, values: [ orbit.id, orbit.letter, orbit.data, orbit.created, orbit.updated ] };
+            var query = { text: sql, values: [ orbit.id, orbit.letter, JSON.stringify( orbit.data ), orbit.created, orbit.updated ] };
             conn.query( query, function( err, result ){
               num ++;
               if( err ){
@@ -163,6 +163,7 @@ api.readOrbit = async function( orbit_id ){
               resolve( { status: false, error: err } );
             }else{
               if( result && result.rows && result.rows.length > 0 ){
+                result.rows[0].data = JSON.parse( result.rows[0].data );
                 resolve( { status: true, result: result.rows[0] } );
               }else{
                 resolve( { status: false, error: 'no data' } );
@@ -206,6 +207,9 @@ api.readOrbits = async function( limit, offset ){
               console.log( err );
               resolve( { status: false, error: err } );
             }else{
+              for( var i = 0; i < result.rows.length; i ++ ){
+                result.rows[i].data = JSON.parse( result.rows[i].data );
+              }
               resolve( { status: true, results: result.rows } );
             }
           });
@@ -245,6 +249,9 @@ api.queryOrbits = async function( key, limit, offset ){
               console.log( err );
               resolve( { status: false, error: err } );
             }else{
+              for( var i = 0; i < result.rows.length; i ++ ){
+                result.rows[i].data = JSON.parse( result.rows[i].data );
+              }
               resolve( { status: true, results: result.rows } );
             }
           });
@@ -290,8 +297,8 @@ api.findClosest = async function( data ){
                     console.log( 'j = ' + j );
                     console.log( orbit.data[j] );
                     console.log( data[j] );
-                    d += Math.pow( orbit.data[j][0] - data[j][0], 2 ) 
-                      + Math.pow( orbit.data[j][1] - data[j][1], 2 );
+                    d += Math.pow( orbit.data[j][0] - parseFloat( data[j][0] ), 2 ) 
+                      + Math.pow( orbit.data[j][1] - parseFloat( data[j][1] ), 2 );
                     console.log( ' d = ' + d );
                   }
 
@@ -326,7 +333,6 @@ api.findClosest = async function( data ){
       resolve( { status: false, error: 'db not ready.' } );
     }
   });
-
 };
 
 
@@ -344,7 +350,7 @@ api.updateOrbit = async function( orbit ){
             //var sql = "select * from items";
             var t = ( new Date() ).getTime();
             quiz.updated = t;
-            var query = { text: sql, values: [ orbit.letter, orbit.data, orbit.updated, orbit.id ] };
+            var query = { text: sql, values: [ orbit.letter, JSON.stringify( orbit.data ), orbit.updated, orbit.id ] };
             //console.log( {query} );
             conn.query( query, function( err, result ){
               if( err ){
