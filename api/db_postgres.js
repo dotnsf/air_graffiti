@@ -2,7 +2,7 @@
 var express = require( 'express' ),
     bodyParser = require( 'body-parser' ),
     fs = require( 'fs' ),
-    { uuidv4 } = require( 'uuid/v4' ),
+    { v4: uuidv4 } = require( 'uuid' ),
     api = express();
 
 process.env.PGSSLMODE = 'no-verify';
