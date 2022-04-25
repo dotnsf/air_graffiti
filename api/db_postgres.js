@@ -543,7 +543,7 @@ api.post( '/find', async function( req, res ){
   var data = req.body;
   console.log( 'POST /find' );
   console.log( data );
-  api.findClosest( data ).then( function( result ){
+  api.findClosest( data.data ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();

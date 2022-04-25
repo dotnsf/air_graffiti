@@ -312,13 +312,15 @@ function touchEndForQuery( e ){
     //. max_x - min_x を 100 とする時、x - min_x はどの位置になるか
     var dx = max_x - min_x;
     var dy = max_y - min_y;
-    var postdata = [];
+    var data = [];
     for( var i = 0; i < orientationData.length; i ++ ){
-      postdata.push( [
+      data.push( [
         100 * ( orientationData[i].lr - min_x ) / dx,
         100 * ( orientationData[i].fb - min_y ) / dy
       ] );
     }
+    
+    var postdata = { data: data };
 
     //. postdata を検索する
     $.ajax({
