@@ -331,6 +331,8 @@ function touchEndForQuery( e ){
       },
       error: function( jqXHR, textStatus, errorThrown ){
         console.log( textStatus + ": " + errorThrown );
+        alert( JSON.stringify( textStatus ) );
+        alert( JSON.stringify( errorThrown ) );
       }
     });
 
