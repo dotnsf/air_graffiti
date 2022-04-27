@@ -296,6 +296,7 @@ function touchEndForQuery( e ){
         console.log( data );
         alert( JSON.stringify( data ) );
         if( data && data.status && data.letter ){
+          ctx.fillStyle = "rgb( 0, 0, 0 )";
           ctx.font = "92px serif";
           var measure = ctx.measureText( data.letter );
           var text_width = measure.width;
