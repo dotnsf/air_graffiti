@@ -294,7 +294,7 @@ function touchEndForQuery( e ){
       data: postdata,
       success: function( data, dataType ){
         console.log( data );
-        //alert( JSON.stringify( data ) );
+        alert( JSON.stringify( data ) );
         if( data && data.status && data.letter ){
           ctx.font = "92px serif";
           var text_width = ctx.measureText( data.letter ).width;
