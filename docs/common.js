@@ -297,8 +297,9 @@ function touchEndForQuery( e ){
         alert( JSON.stringify( data ) );
         if( data && data.status && data.letter ){
           ctx.font = "92px serif";
-          var text_width = ctx.measureText( data.letter ).width;
-          var text_height = ctx.measureText( data.letter ).height;
+          var measure = ctx.measureText( data.letter );
+          var text_width = measure.width;
+          var text_height = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
           ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
         }
       },
