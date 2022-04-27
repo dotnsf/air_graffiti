@@ -303,9 +303,6 @@ api.findClosest = async function( data ){
                   orbit.data = JSON.parse( orbit.data );
                   var d = 0.0;
                   for( var j = 0; j < orbit.data.length && j < data.length; j ++ ){
-                    console.log( 'j=' + j );
-                    console.log( orbit.data[j] );
-                    console.log( data[j] );
                     d += Math.pow( orbit.data[j][0] - parseFloat( data[j][0] ), 2 ) 
                       + Math.pow( orbit.data[j][1] - parseFloat( data[j][1] ), 2 );
                   }
