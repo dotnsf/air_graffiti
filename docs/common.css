@@ -8,6 +8,9 @@ html, body{
 body{
   background-color: #ffffcc;
 }
+body.index{
+  background-color: #fcf;
+}
 #mycanvas{
   border: 1px solid #333;
   background-color: #fff;
