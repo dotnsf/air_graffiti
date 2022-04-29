@@ -40,6 +40,9 @@
 <script src="./common.js"></script>
 <link href="./common.css" rel="stylesheet"/>
 <script>
+//. #1
+var webhook_url = '<%= webhook_url %>';
+
 $(function(){
   if( window.DeviceOrientationEvent ){
     if( DeviceOrientationEvent.requestPermission && typeof DeviceOrientationEvent.requestPermission === 'function' ){
