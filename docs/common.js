@@ -449,7 +449,7 @@ function touchEnd( e ){
 
           //. 認識結果を使って Webhook を呼び出す
           //. Webhook URL は環境変数から取得するのがいい？
-          var webhook_url = process.env.WEBHOOK_URL ? process.env.WEBHOOK_URL : '';
+          var webhook_url = '<%= webhook_url %>';
           if( webhook_url ){
             //. CORS に注意
             var get_url = webhook_url + '?letter=' + data.letter;

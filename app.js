@@ -27,8 +27,12 @@ var sess = {
 app.use( session( sess ) );
 
 
+//. #1
+var webhook_url = process.env.WEBHOOK_URL ? process.env.WEBHOOK_URL : '';
+
+
 app.get( '/', function( req, res ){
-  res.render( 'index', {} );
+  res.render( 'index', { webhook_url: webhook_url } );
 });
 
 app.get( '/query', function( req, res ){
