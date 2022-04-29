@@ -381,7 +381,7 @@ function touchEnd( e ){
 
     //. ペンを始点に移動
     ctx.beginPath();
-    ctx.strokeStyle = "rgb( 200, 200, 200 )";
+    ctx.strokeStyle = "rgb( 200, 200, 255 )";
     ctx.lineWidth = 5;
     ctx.moveTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
 
