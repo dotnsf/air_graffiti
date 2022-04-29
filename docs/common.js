@@ -252,10 +252,10 @@ function touchEndForQuery( e ){
     var max_y = orientationData[0].fb;
 
     //. ペンを始点に移動
-    //ctx.beginPath();
-    //ctx.strokeStyle = "rgb( 0, 0, 0 )";
-    //ctx.lineWidth = 5;
-    //ctx.moveTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
+    ctx.beginPath();
+    ctx.strokeStyle = "rgb( 200, 200, 200 )";
+    ctx.lineWidth = 5;
+    ctx.moveTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
 
     //. ２つ目以降のデータ
     for( var i = 1; i < orientationData.length; i ++ ){
@@ -263,7 +263,7 @@ function touchEndForQuery( e ){
       abg = orientationData[i];
       x = abg['lr'];
       y = abg['fb'];
-      //ctx.lineTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
+      ctx.lineTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
 
       //. 入力データの正規化
       if( x < min_x ){ min_x = x; }
@@ -271,7 +271,7 @@ function touchEndForQuery( e ){
       if( y < min_y ){ min_y = y; }
       if( y > max_y ){ max_y = y; }
     }
-    //ctx.stroke();
+    ctx.stroke();
 
     //. 入力データの座標を 0-100 の範囲に置き換える
     //. max_x - min_x を 100 とする時、x - min_x はどの位置になるか
@@ -297,9 +297,25 @@ function touchEndForQuery( e ){
         //alert( JSON.stringify( data ) );
         if( data && data.status && data.letter ){
           ctx.fillStyle = "rgb( 0, 0, 0 )";
-          ctx.font = "92px serif";
-          var measure = ctx.measureText( data.letter );
-          var text_width = measure.width;
+
+          var b = true;
+          var fontsize = 92;
+          var measure = null;
+          var text_width = 0;
+          while( b ){
+            ctx.font = fontsize + "px serif";
+            measure = ctx.measureText( data.letter );
+            text_width = measure.width;
+            if( text_width >= canvas_width ){
+              if( fontsize > 1 ){
+                fontsize --;
+              }else{
+                b = false;
+              }
+            }else{
+              b = false;
+            }
+          }
           var text_height = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
           ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
         }

@@ -28,6 +28,10 @@ app.use( session( sess ) );
 
 
 app.get( '/', function( req, res ){
+  res.render( 'index', {} );
+});
+
+app.get( '/query', function( req, res ){
   res.render( 'query', {} );
 });
 
