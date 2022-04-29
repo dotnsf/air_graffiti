@@ -1,7 +1,21 @@
 //. common.js
 var isTouch = false;
 var orientationData = [];
+var DataSize = 50;
 var letter = null;
+
+function ClickRequestDeviceSensor(){
+  //. ユーザーに「許可」を明示させる必要がある
+  DeviceOrientationEvent.requestPermission().then( function( response ){
+    if( response === 'granted' ){
+      window.addEventListener( "deviceorientation", deviceOrientation );
+      $('#sensorrequest').css( 'display', 'none' );
+      $('#cdiv').css( 'display', 'block' );
+    }
+  }).catch( function( e ){
+    console.log( e );
+  });
+}
 
 function ClickRequestDeviceSensorForTraining(){
   //. ユーザーに「許可」を明示させる必要がある
@@ -73,7 +87,9 @@ function touchStart( e ){
 
 function reduceData( arr, num ){
   var newarr = [];
-  if( arr.length > num ){
+  //if( arr.length > num ){
+  if( arr && arr.length > 0 && num > 0 ){
+    //. データを減らすだけでなく、増やせるようにも変更
     var step = arr.length / num;
     for( var i = 0; i < arr.length; i += step ){
       var idx = Math.floor( i );
@@ -91,7 +107,7 @@ function touchEndForTraining( e ){
   e.preventDefault();
   isTouch = false;
 
-  if( orientationData && orientationData.length >= 50 ){
+  if( orientationData && orientationData.length > 0 ){
     //. 描画
     var cvs = document.getElementById( "mycanvas" );
     var ctx = cvs.getContext( "2d" );
@@ -105,7 +121,7 @@ function touchEndForTraining( e ){
     var x, y;
 
     //. データを 50 個に凝縮
-    orientationData = reduceData( orientationData, 50 );
+    orientationData = reduceData( orientationData, DataSize );
 
     //. 最初のデータ
     abg = orientationData[0];
@@ -192,7 +208,7 @@ function touchEndForTraining( e ){
 
     orientationData = [];
   }else{
-    alert( 'データが少なすぎです（' + orientationData.length + '） >=50' );
+    alert( 'データが少なすぎです（' + orientationData.length + '）' );
   }
 }
 
@@ -200,7 +216,7 @@ function touchEndForQuery( e ){
   e.preventDefault();
   isTouch = false;
 
-  if( orientationData && orientationData.length >= 50 ){
+  if( orientationData && orientationData.length > 0 ){
     //. 描画
     var cvs = document.getElementById( "mycanvas" );
     var ctx = cvs.getContext( "2d" );
@@ -214,7 +230,7 @@ function touchEndForQuery( e ){
     var x, y;
 
     //. データを 50 個に凝縮
-    orientationData = reduceData( orientationData, 50 );
+    orientationData = reduceData( orientationData, DataSize );
 
     /*
     //. 最初のデータ
@@ -326,46 +342,123 @@ function touchEndForQuery( e ){
       }
     });
 
-    /*
-    //. Canvas => Image
-    var png = cvs.toDataURL( 'image/png' );
-    document.getElementById( "resultimg" ).src = png;
+    orientationData = [];
+  }else{
+    alert( 'データが少なすぎです（' + orientationData.length + '）' );
+  }
+}
 
-    //. 画像データ取得
-    png = png.replace( /^.*,/, '' );
+function touchEnd( e ){
+  e.preventDefault();
+  isTouch = false;
 
-    //. バイナリ変換
-    var bin = atob( png );
-    var buffer = new Uint8Array( bin.length );
-    for( var i = 0; i < bin.length; i ++ ){
-      buffer[i] = bin.charCodeAt( i );
+  if( orientationData && orientationData.length > 0 ){
+    //. 描画
+    var cvs = document.getElementById( "mycanvas" );
+    var ctx = cvs.getContext( "2d" );
+    ctx.beginPath();
+
+    //. 全体を白でベタ塗り
+    ctx.fillStyle = "rgb( 255, 255, 255 )";
+    ctx.fillRect( 0, 0, canvas_width, canvas_height );
+
+    var abg = null;
+    var x, y;
+
+    //. データを 50 個に凝縮
+    orientationData = reduceData( orientationData, DataSize );
+
+    //. 最初のデータ
+    abg = orientationData[0];
+    x = abg['lr'];
+    y = abg['fb'];
+
+    //. 入力データの正規化
+    var min_x = orientationData[0].lr;
+    var max_x = orientationData[0].lr;
+    var min_y = orientationData[0].fb;
+    var max_y = orientationData[0].fb;
+
+    //. ペンを始点に移動
+    ctx.beginPath();
+    ctx.strokeStyle = "rgb( 200, 200, 200 )";
+    ctx.lineWidth = 5;
+    ctx.moveTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
+
+    //. ２つ目以降のデータ
+    for( var i = 1; i < orientationData.length; i ++ ){
+      //. ペンの移動を繰り返す
+      abg = orientationData[i];
+      x = abg['lr'];
+      y = abg['fb'];
+      ctx.lineTo( 2 * x + canvas_width / 2 , -2 * y + canvas_height / 2 );
+
+      //. 入力データの正規化
+      if( x < min_x ){ min_x = x; }
+      if( x > max_x ){ max_x = x; }
+      if( y < min_y ){ min_y = y; }
+      if( y > max_y ){ max_y = y; }
     }
-    var blob = new Blob( [buffer.buffer], {
-      type: 'image/png'
-    });
+    ctx.stroke();
 
-    //. POST
-    var formdata = new FormData();
-    formdata.append( 'image', blob );
+    //. 入力データの座標を 0-100 の範囲に置き換える
+    //. max_x - min_x を 100 とする時、x - min_x はどの位置になるか
+    var dx = max_x - min_x;
+    var dy = max_y - min_y;
+    var data = [];
+    for( var i = 0; i < orientationData.length; i ++ ){
+      data.push( [
+        100 * ( orientationData[i].lr - min_x ) / dx,
+        100 * ( orientationData[i].fb - min_y ) / dy
+      ] );
+    }
+    
+    var postdata = { data: data };
 
+    //. postdata を検索する
     $.ajax({
       type: "POST",
-      url: "./image",
-      data: formdata,
-      contentType: false,
-      processData: false,
+      url: "./api/db/find",
+      data: postdata,
       success: function( data, dataType ){
         console.log( data );
+        //alert( JSON.stringify( data ) );
+        if( data && data.status && data.letter ){
+          ctx.fillStyle = "rgb( 0, 0, 0 )";
+
+          var b = true;
+          var fontsize = 92;
+          var measure = null;
+          var text_width = 0;
+          while( b ){
+            ctx.font = fontsize + "px serif";
+            measure = ctx.measureText( data.letter );
+            text_width = measure.width;
+            if( text_width >= canvas_width ){
+              if( fontsize > 1 ){
+                fontsize --;
+              }else{
+                b = false;
+              }
+            }else{
+              b = false;
+            }
+          }
+          var text_height = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
+          ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
+
+          //. 認識結果を使って Webhook を呼び出す
+        }
       },
       error: function( jqXHR, textStatus, errorThrown ){
         console.log( textStatus + ": " + errorThrown );
+        alert( JSON.stringify( textStatus ) );
       }
     });
-    */
 
     orientationData = [];
   }else{
-    alert( 'データが少なすぎです（' + orientationData.length + '） >=50' );
+    alert( 'データが少なすぎです（' + orientationData.length + '）' );
   }
 }
 

@@ -21,7 +21,7 @@
 <!-- // OGP tags -->
 <meta property="og:title" content="Air Graffiti"/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="//dotnsf.github.io/air_graffiti/"/>
+<meta property="og:url" content="//air-graffiti.herokuapp.com/"/>
 <meta property="og:image" content="//dotnsf.github.io/air_graffiti/imgs/icon.png"/>
 <meta property="og:site_name" content="Air Graffiti"/>
 <meta property="og:description" content="Air Graffiti"/>
@@ -31,7 +31,7 @@
 <meta property="twitter:card" content="summary"/>
 <meta property="twitter:site" content="@dotnsf"/>
 <meta property="twitter:creator" content="@dotnsf"/>
-<meta property="twitter:url" content="//dotnsf.github.io/air_graffiti/"/>
+<meta property="twitter:url" content="//air-graffiti.herokuapp.com/"/>
 <meta property="twitter:image" content="//dotnsf.github.io/air_graffiti/imgs/icon.png"/>
 <meta property="twitter:title" content="Air Graffiti"/>
 <meta property="twitter:description" content="Air Graffiti"/>
@@ -44,7 +44,7 @@ $(function(){
   if( window.DeviceOrientationEvent ){
     if( DeviceOrientationEvent.requestPermission && typeof DeviceOrientationEvent.requestPermission === 'function' ){
       $('#cdiv').css( 'display', 'none' );
-      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensorForQuery();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
+      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensor();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
       $('body').prepend( banner );
     }else{
       window.addEventListener( "deviceorientation", deviceOrientation );
@@ -54,7 +54,7 @@ $(function(){
   if( window.TouchEvent ){
     var canvas = document.getElementById( 'touchcanvas' );
     canvas.addEventListener( "touchstart", touchStart );
-    canvas.addEventListener( "touchend", touchEndForQuery );
+    canvas.addEventListener( "touchend", touchEnd );
   }
 });
 </script>
