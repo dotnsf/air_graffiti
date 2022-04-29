@@ -453,14 +453,12 @@ function touchEnd( e ){
             //. CORS に注意
             var get_url = webhook_url + '?letter=' + data.letter;
             postdata = { url: get_url };
-            alert( JSON.stringify( postdata ) );
             $.ajax({
               type: "POST",
               url: "./api/db/webhook",
               data: postdata,
               success: function( result ){
                 console.log( result );
-                alert( JSON.stringify( result ) );
               },
               error: function( e0, e1, e2 ){
                 console.log( e0, e1, e2 );
