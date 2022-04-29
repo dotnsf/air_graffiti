@@ -44,7 +44,7 @@ $(function(){
   if( window.DeviceOrientationEvent ){
     if( DeviceOrientationEvent.requestPermission && typeof DeviceOrientationEvent.requestPermission === 'function' ){
       $('#cdiv').css( 'display', 'none' );
-      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensorForTraining();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
+      var banner = '<div id="sensorrequest" onclick="ClickRequestDeviceSensorForQuery();" style="z-index:1; position:absolute; width:100%; background-color:#000; color:#fff;><p style="padding:10px;">センサーの有効化</p></div>';
       $('body').prepend( banner );
     }else{
       window.addEventListener( "deviceorientation", deviceOrientation );
@@ -54,13 +54,30 @@ $(function(){
   if( window.TouchEvent ){
     var canvas = document.getElementById( 'touchcanvas' );
     canvas.addEventListener( "touchstart", touchStart );
-    canvas.addEventListener( "touchend", touchEndForTraining );
+    canvas.addEventListener( "touchend", touchEndForQuery );
   }
 });
 </script>
 
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">AG</a>
+  <button class="nabvar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="nabvar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="./query">Q</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./training">T</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <div class="container">
   <div id="cdiv">
