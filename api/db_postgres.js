@@ -4,6 +4,7 @@ var express = require( 'express' ),
     fs = require( 'fs' ),
     { v4: uuidv4 } = require( 'uuid' ),
     api = express();
+var axios = require( 'axios' ).default;
 
 process.env.PGSSLMODE = 'no-verify';
 var PG = require( 'pg' );
@@ -450,6 +451,20 @@ api.deleteOrbits = async function(){
   });
 };
 
+api.fireWebhook = async function( url ){
+  return new Promise( async ( resolve, reject ) => {
+    if( url ){
+      axios.get( url ).then( function( result ){
+        resolve( { status: true, result: result } );
+      }).catch( function( err ){
+        resolve( { status: false, error: err } );
+      });
+    }else{
+      resolve( { status: false, error: 'no url specified.' } );
+    }
+  });
+};
+
 
 api.post( '/orbit', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
@@ -557,6 +572,27 @@ api.post( '/find', async function( req, res ){
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+});
+
+api.post( '/webhook', async function( req, res ){
+  res.contentType( 'application/json; charset=utf-8' );
+
+  var data = req.body;
+  if( data && data.url ){
+    api.fireWebhook( data.url ).then( function( result ){
+      res.status( result.status ? 200 : 400 );
+      res.write( JSON.stringify( result, null, 2 ) );
+      res.end();
+    }).catch( function( err ){
+      res.status( result.status ? 200 : 400 );
+      res.write( JSON.stringify( { status: false, error: err }, null, 2 ) );
+      res.end();
+    });
+  }else{
+    res.status( 400 );
+    res.write( JSON.stringify( { status: false, error: 'no url found.' }, null, 2 ) );
+    res.end();
+  }
 });
 
 

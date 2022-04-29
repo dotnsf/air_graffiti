@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/obniz@3.x/obniz.js" crossorigin="anonymous" ></script>
+  </head>
+  <body>
+    <div id="obniz-debug"></div>
+    <div class="container">
+      <div class="text-center">
+        <h3>Webhook App</h3>
+      </div>
+    </div>
+
+    <script>
+var obniz = new Obniz.M5StickC("OBNIZ_ID_HERE");
+obniz.onconnect = async function () {
+  const req = Obniz.App.req();
+  //console.log(req.query);
+  if( req.query ){
+    var letter = req.query.letter;
+    if( letter == '1' ){
+      obniz.led.blink();
+    }
+  }
+
+  if (Obniz.App.isCloudRunning()) {
+    Obniz.App.done({
+      status: 'success',
+      text: `Worked`
+    })
+  } else {
+    alert("Done.")
+  }
+}
+    </script>
+  </body>
+</html>

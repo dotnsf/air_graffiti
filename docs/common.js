@@ -448,6 +448,24 @@ function touchEnd( e ){
           ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
 
           //. 認識結果を使って Webhook を呼び出す
+          //. Webhook URL は環境変数から取得するのがいい？
+          var webhook_url = process.env.WEBHOOK_URL ? process.env.WEBHOOK_URL : '';
+          if( webhook_url ){
+            //. CORS に注意
+            var get_url = webhook_url + '?letter=' + data.letter;
+            postdata = { url: get_url };
+            $.ajax({
+              type: "POST",
+              url: "./api/db/webhook",
+              data: postdata,
+              success: function( result ){
+                console.log( result );
+              },
+              error: function( e0, e1, e2 ){
+                console.log( e0, e1, e2 );
+              }
+            });
+          }
         }
       },
       error: function( jqXHR, textStatus, errorThrown ){
