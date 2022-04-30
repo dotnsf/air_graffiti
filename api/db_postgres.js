@@ -6,7 +6,7 @@ var express = require( 'express' ),
     api = express();
 var axios = require( 'axios' ).default;
 
-process.env.PGSSLMODE = 'no-verify';
+//process.env.PGSSLMODE = 'no-verify';
 var PG = require( 'pg' );
 PG.defaults.ssl = true;
 var database_url = 'DATABASE_URL' in process.env ? process.env.DATABASE_URL : ''; 
@@ -18,6 +18,11 @@ if( database_url ){
     //ssl: { require: true, rejectUnauthorized: false },
     idleTimeoutMillis: ( 3 * 86400 * 1000 )
   });
+
+  api.createTable().then( function( result ){
+  }).catch( function( e ){
+  });
+
   pg.on( 'error', function( err ){
     console.log( 'error on working', err );
     if( err.code && err.code.startsWith( '5' ) ){
@@ -34,6 +39,11 @@ function try_reconnect( ts ){
       //ssl: { require: true, rejectUnauthorized: false },
       idleTimeoutMillis: ( 3 * 86400 * 1000 )
     });
+
+    api.createTable().then( function( result ){
+    }).catch( function( e ){
+    });
+
     pg.on( 'error', function( err ){
       console.log( 'error on retry(' + ts + ')', err );
       if( err.code && err.code.startsWith( '5' ) ){
@@ -59,6 +69,39 @@ api.use( bodyParser.json( { limit: '50mb' }) );
 api.use( express.Router() );
 
 //. Create
+api.createTable = async function(){
+  return new Promise( async ( resolve, reject ) => {
+    if( pg ){
+      conn = await pg.connect();
+      if( conn ){
+        try{
+          var sql = "create table if not exists orbits ( id varchar(50) not null primary key, letter varchar(5) not null, data text default '', created bigint default 0, updated bigint default 0 );";
+          var query = { text: sql, values: [] };
+          conn.query( query, function( err, result ){
+            if( err ){
+              console.log( err );
+              resolve( { status: false, error: err } );
+            }else{
+              resolve( { status: true, result: result } );
+            }
+          });
+        }catch( e ){
+          console.log( e );
+          resolve( { status: false, error: err } );
+        }finally{
+          if( conn ){
+            conn.release();
+          }
+        }
+      }else{
+        resolve( { status: false, error: 'no connection.' } );
+      }
+    }else{
+      resolve( { status: false, error: 'db not ready.' } );
+    }
+  });
+};
+
 api.createOrbit = async function( orbit ){
   return new Promise( async ( resolve, reject ) => {
     if( pg ){

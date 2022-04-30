@@ -7,33 +7,40 @@
 
 ## Requisites
 
-ジャイロセンサーが搭載されたスマートフォンのウェブブラウザが必要です。 スマートフォンが Android の場合はほぼ問題なく大丈夫だと思っています。
+ジャイロセンサーが搭載されたスマートフォンのウェブブラウザが必要です。 スマートフォンが iOS / Android の場合はほぼ問題なく大丈夫だと思っています。
 
-iOS 搭載機を使って Safari ブラウザで利用する場合、iOS のバージョンによってはジャイロセンサー情報を取得するために以下の設定が事前・動作中に必要です：
 
-- iOS 12.1 以下の場合、
+## Environment Values
 
-  - 事前設定、動作中設定ともに不要です。そのまま動くはずです。
+- `DATABASE_URL`
 
-- iOS 12.2 以上 13 未満の場合、
+  - Required
 
-  - 事前に **設定 - Safari の「モーションと画面の向きのアクセス」を ON** に設定しておいてください。以下の画面では OFF の状態です。
+  - URI string of PostgreSQL database, ex "postgres://user:pass@host:port/db"
 
-  - ![設定 - Safari](./imgs/ios12.2.png "設定 - Safari")
+- `PGSSLMODE`
 
-- iOS 13 以上の場合、
+  - Optional. Required if you want to set PostgreSQL SSL mode.
 
-  - 事前設定は不要ですが、起動直後に **「センサーの有効化」** と書かれた画面上部のボタンをクリックする必要があります：
+  - Ex. `no-verify`
 
-  - ![センサーの有効化](./imgs/ios13_sensor1.png "センサーの有効化")
+- `WEBHOOK_URL`
 
-  - すると **「動作と方向へのアクセス」** への許可を求めるダイアログが表示されます。ここで **「許可」** を選択してください：
+  - Optional. Required if you want to enable Webhook.
 
-  - ![センサーの有効化を許可](./imgs/ios13_sensor2.png "センサーの有効化を許可")
+  - URI string of Webhook which would be fired if letter would be recognized.
 
-  - 「センサーの有効化」ボタンが消え、画面にピンクの矩形が表示されれば準備完了です：
+- `CORS`
 
-  - ![センサーの有効化完了](./imgs/ios13_sensor3.png "センサーの有効化完了")
+  - Optional. Required if you want to enable CORS for PostgreSQL/Webhook API.
+
+  - Origin URL to allow CORS.
+
+- `PORT`
+
+  - Optional. Required if you want to change server's listening port from 8080.
+
+  - Port number(Default 8080).
 
 
 ## Reference
