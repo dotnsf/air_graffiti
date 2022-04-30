@@ -19,10 +19,6 @@ if( database_url ){
     idleTimeoutMillis: ( 3 * 86400 * 1000 )
   });
 
-  api.createTable().then( function( result ){
-  }).catch( function( e ){
-  });
-
   pg.on( 'error', function( err ){
     console.log( 'error on working', err );
     if( err.code && err.code.startsWith( '5' ) ){
@@ -638,6 +634,10 @@ api.post( '/webhook', async function( req, res ){
   }
 });
 
+
+api.createTable().then( function( result ){
+}).catch( function( e ){
+});
 
 
 //. api をエクスポート
