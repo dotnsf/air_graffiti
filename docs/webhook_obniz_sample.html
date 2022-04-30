@@ -15,24 +15,26 @@
     </div>
 
     <script>
-var obniz = new Obniz.M5StickC("OBNIZ_ID_HERE");
+//var obniz = new Obniz( "OBNIZ_ID_HERE" );  //. 一般的な Obniz デバイスの場合
+var obniz = new Obniz.M5StickC( "OBNIZ_ID_HERE" );  //. M5StickC の場合
 obniz.onconnect = async function () {
   const req = Obniz.App.req();
-  //console.log(req.query);
-  if( req.query ){
+  //console.log( req.query );
+  if( req.query && req.query.letter ){
     var letter = req.query.letter;
+    //. "1" を認識した時に（M5StickC の） LED を点滅させるサンプル
     if( letter == '1' ){
       obniz.led.blink();
     }
   }
 
-  if (Obniz.App.isCloudRunning()) {
+  if( Obniz.App.isCloudRunning() ){
     Obniz.App.done({
       status: 'success',
       text: `Worked`
-    })
-  } else {
-    alert("Done.")
+    });
+  }else{
+    alert( "Done." )
   }
 }
     </script>

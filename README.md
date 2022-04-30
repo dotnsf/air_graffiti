@@ -10,6 +10,13 @@
 ジャイロセンサーが搭載されたスマートフォンのウェブブラウザが必要です。 スマートフォンが iOS / Android の場合はほぼ問題なく大丈夫だと思っています。
 
 
+## Pre-requisite
+
+「特定の文字列を認識した時に何らかのアクションを実行する」機能を有効にする場合は、アクション先の Webhook URL を環境変数 `WEBHOOK_URL` に登録した上で実行する必要があります。
+
+またその場合、`WEBHOOK_URL` を受け取った先で目的のアクションが実行されるような仕組みが必要です。本ソースコード内の `docs/webhook_obniz_sample.html` は **Obniz** 向けのサンプルの１つで、**Obniz.M5StickC** でこのコードをクラウド実行すると、M5StickC の標準 LED が点滅する、というサンプルです。
+
+
 ## Environment Values
 
 - `DATABASE_URL`
