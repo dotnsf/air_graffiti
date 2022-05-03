@@ -64,7 +64,7 @@ function init(){
   }
   window.addEventListener( 'touchmove', movefun, { passive: false } );
 
-  //. #2
+  /* #3
   $.ajax({
     type: 'GET',
     url: "./api/db/orbits",
@@ -74,13 +74,14 @@ function init(){
         for( var i = 0; i < result.results.length; i ++ ){
           orbits.push( result.results[i] ); //. { id: "xx", letter: "2", data: [ [x0,y0], [x1,y1], .. ] }
         }
-        alert( JSON.stringify( orbits ) );
+        //alert( JSON.stringify( orbits ) );
       }
     },
     error: function( e0, e1, e2 ){
       console.log( e0, e1, e2 );
     }
   });
+  */
 }
 
 var canvas_width = 200;
