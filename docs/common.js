@@ -72,7 +72,7 @@ function init(){
       if( result && result.status && result.results ){
         orbits = [];
         for( var i = 0; i < result.results.length; i ++ ){
-          orbits.push( result.results[i].data );
+          orbits.push( result.results[i] ); //. { id: "xx", letter: "2", data: [ [x0,y0], [x1,y1], .. ] }
         }
         alert( JSON.stringify( orbits ) );
       }
@@ -319,7 +319,35 @@ function touchEndForQuery( e ){
         100 * ( orientationData[i].fb - min_y ) / dy
       ] );
     }
+
+    var letter = compareData( data );
+    if( letter ){
+      ctx.fillStyle = "rgb( 0, 0, 0 )";
+
+      var b = true;
+      var fontsize = 92;
+      var measure = null;
+      var text_width = 0;
+      while( b ){
+        ctx.font = fontsize + "px serif";
+        measure = ctx.measureText( data.letter );
+        text_width = measure.width;
+        if( text_width >= canvas_width ){
+          if( fontsize > 1 ){
+            fontsize --;
+          }else{
+            b = false;
+          }
+        }else{
+          b = false;
+        }
+      }
+      var text_height = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
+      ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
+    }else{
+    }
     
+    /*
     var postdata = { data: data };
 
     //. postdata を検索する
@@ -360,6 +388,7 @@ function touchEndForQuery( e ){
         alert( JSON.stringify( textStatus ) );
       }
     });
+    */ 
 
     orientationData = [];
   }else{
@@ -511,5 +540,29 @@ function deviceOrientation( e ){
     ori['lr'] = gamma;
 
     orientationData.push( ori );
+  }
+}
+
+function compareData( data ){
+  var idx = -1;
+  var closest = -1;
+  for( var i = 0; i < orbits.length; i ++ ){
+    var orbit = orbits[i];
+    var d = 0.0;
+    for( var j = 0; j < orbit.data.length && j < data.length; j ++ ){
+      d += Math.pow( orbit.data[j][0] - parseFloat( data[j][0] ), 2 ) 
+        + Math.pow( orbit.data[j][1] - parseFloat( data[j][1] ), 2 );
+    }
+
+    if( i == 0 || d < closest ){
+      closest = d;
+      idx = i;
+    }
+  }
+
+  if( closest > -1 && idx > -1 ){
+    return orbits[idx].letter;
+  }else{
+    return null;
   }
 }
