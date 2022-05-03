@@ -3,6 +3,7 @@ var isTouch = false;
 var orientationData = [];
 var DataSize = 50;
 var letter = null;
+var orbits = [];
 
 function ClickRequestDeviceSensor(){
   //. ユーザーに「許可」を明示させる必要がある
@@ -62,6 +63,24 @@ function init(){
     event.preventDefault();
   }
   window.addEventListener( 'touchmove', movefun, { passive: false } );
+
+  //. #2
+  $.ajax({
+    type: 'GET',
+    url: "./api/db/orbits",
+    success: function( result ){
+      if( result && result.status && result.results ){
+        orbits = [];
+        for( var i = 0; i < result.results.length; i ++ ){
+          orbits.push( result.results[i].data );
+        }
+        alert( JSON.stringify( orbits ) );
+      }
+    },
+    error: function( e0, e1, e2 ){
+      console.log( e0, e1, e2 );
+    }
+  });
 }
 
 var canvas_width = 200;

@@ -242,7 +242,7 @@ api.readOrbits = async function( limit, offset ){
       conn = await pg.connect();
       if( conn ){
         try{
-          var sql = "select * from orbits order by updated";
+          var sql = "select * from orbits order by letter, updated";
           if( limit ){
             sql += " limit " + limit;
           }
