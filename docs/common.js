@@ -320,6 +320,7 @@ function touchEndForQuery( e ){
       ] );
     }
 
+    /* #3 : こっちの方がパフォーマンス悪い？
     var letter = compareData( data );
     if( letter ){
       ctx.fillStyle = "rgb( 0, 0, 0 )";
@@ -346,8 +347,9 @@ function touchEndForQuery( e ){
       ctx.fillText( data.letter, ( canvas_width - text_width ) / 2, ( canvas_height - text_height ) / 2 );
     }else{
     }
+    */
     
-    /*
+    //. #3 はパフォーマンスの問題から採用しないことにする
     var postdata = { data: data };
 
     //. postdata を検索する
@@ -388,7 +390,6 @@ function touchEndForQuery( e ){
         alert( JSON.stringify( textStatus ) );
       }
     });
-    */ 
 
     orientationData = [];
   }else{
